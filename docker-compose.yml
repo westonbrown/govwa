@@ -16,12 +16,12 @@ services:
     command: mysqld --sql_mode=""
     container_name: db_mysql
     ports: 
-      - 3307:3306
+      - "127.0.0.1:3307:3306"
     environment: 
       - MYSQL_ROOT_HOST=mysql-host
       - MYSQL_USER=govwauser
-      - MYSQL_PASSWORD=govwaP@ss
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:?set MYSQL_PASSWORD for the govwa database user}
       - MYSQL_DATABASE=govwa
-      - MYSQL_ROOT_PASSWORD=admin321
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:?set MYSQL_ROOT_PASSWORD for the MySQL root user}
     
   

@@ -63,7 +63,20 @@ func setupViewHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Param
 
 func setupActionHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
+	/* once the database is set up, only a signed-in user may reset it */
+	if ok, _ := database.CheckDatabase(); ok && !session.New().IsLoggedIn(r) {
+		http.Error(w, "Forbidden", http.StatusForbidden)
+		return
+	}
+
 	if r.Method == "POST" && r.FormValue("act") == "cr" {
+
+		/* only initialise a database that is not set up yet, an existing
+		   installation must never be dropped and reseeded by an anonymous request */
+		if ok, _ := database.CheckDatabase(); ok {
+			http.Error(w, "Forbidden", http.StatusForbidden)
+			return
+		}
 
 		res := []JsonResp{}
 		loginUrl := util.ToHTML(fmt.Sprintf(`<a href=%slogin>Login</a>`, config.Fullurl))

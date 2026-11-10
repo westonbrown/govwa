@@ -55,7 +55,7 @@ func (this *Class) CapturePanic(h httprouter.Handle) httprouter.Handle {
 					err = errors.New("Unknown error")
 				}
 				log.Println(err.Error())
-				http.Error(w, err.Error(), http.StatusInternalServerError)
+				http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 			}
 		}()
 		h(w, r, ps)

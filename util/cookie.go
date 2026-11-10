@@ -5,13 +5,13 @@ import (
 	"time"
 )
 
-func SetCookieLevel(w http.ResponseWriter, r *http.Request, cookievalue string){
+func SetCookieLevel(w http.ResponseWriter, r *http.Request, cookievalue string) {
 
 	level := cookievalue
 	if level == "" {
 		level = "low"
 	}
-	SetCookie(w,"Level",level)
+	SetCookie(w, "Level", level)
 
 }
 
@@ -28,26 +28,29 @@ func CheckLevel(r *http.Request) bool {
 
 /* cookie setter getter */
 
-func SetCookie(w http.ResponseWriter, name, value string){
+func SetCookie(w http.ResponseWriter, name, value string) {
 	cookie := http.Cookie{
 		//Path : "/",
 		//Domain : "localhost",
-		Name: name, 
+		Name:  name,
 		Value: value,
 	}
 	http.SetCookie(w, &cookie)
 }
 
-func GetCookie(r *http.Request, name string)string{
-	cookie, _ := r.Cookie(name)
+func GetCookie(r *http.Request, name string) string {
+	cookie, err := r.Cookie(name)
+	if err != nil {
+		return ""
+	}
 	return cookie.Value
 }
 
-func DeleteCookie(w http.ResponseWriter, cookies []string){
-	for _,name := range cookies{
+func DeleteCookie(w http.ResponseWriter, cookies []string) {
+	for _, name := range cookies {
 		cookie := &http.Cookie{
-			Name:     name,
-			Value:    "",
+			Name:    name,
+			Value:   "",
 			Expires: time.Unix(0, 0),
 		}
 		http.SetCookie(w, cookie)
