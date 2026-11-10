@@ -71,7 +71,14 @@ Open the URL to access GoVWA and follow the setup instruction to create database
 git clone https://github.com/0c34/govwa.git
 
 inside govwa directory:
+export MYSQL_ROOT_PASSWORD="$(openssl rand -base64 24)"
+export MYSQL_PASSWORD="$(openssl rand -base64 24)"
 docker-compose up --build
+
+Set the same `MYSQL_PASSWORD` value as `password` in `config/config.json` before starting,
+since the application reads its database login from that file.
+If this repository was ever run with the old committed passwords, change the database
+passwords and update `config/config.json` to match.
 
 stop running process using
 docker-compose down --remove-orphans --volumes
